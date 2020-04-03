@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">MapBox</string>
     <string name="title_activity_maps">Map</string>
-
+    <!--
+    <string name="mapbox_access_token">For security reasons, you should put this resource in
+    a separate xml file whose path is included in .gitignore, and set its value to your own
+    MapBox Access Token.</string>
+     -->
 </resources>
