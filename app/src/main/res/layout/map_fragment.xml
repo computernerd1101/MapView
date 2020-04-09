@@ -1,27 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<com.mapbox.mapboxsdk.maps.MapView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-        <variable
-            name="viewModel"
-            type="com.computernerd1101.mapbox.ui.main.MapViewModel" />
-    </data>
-
-    <com.mapbox.mapboxsdk.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:mapbox_cameraTargetLat="37.3220096"
-        app:mapbox_cameraTargetLng="-113.1833194"
-        app:mapbox_cameraZoom="10"
-        app:mapbox_cameraBearing="34.33"
-        app:mapbox_cameraTilt="50.25"
-        app:mapbox_cameraZoomMax="12.41"
-        app:mapbox_cameraZoomMin="6"
-        app:mapbox_uiRotateGestures="true"
-        />
-
-</layout>
+    android:id="@+id/mapView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:mapbox_cameraTargetLat="37.3220096"
+    app:mapbox_cameraTargetLng="-113.1833194"
+    app:mapbox_cameraZoom="10"
+    app:mapbox_cameraBearing="34.33"
+    app:mapbox_cameraTilt="50.25"
+    app:mapbox_cameraZoomMax="12.41"
+    app:mapbox_cameraZoomMin="6"
+    app:mapbox_uiRotateGestures="true"
+    />

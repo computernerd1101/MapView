@@ -7,6 +7,12 @@ apply plugin: 'androidx.navigation.safeargs'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
+    ndkVersion="20.0.5594570"
+
+    // Enables data binding.
+    dataBinding {
+        enabled = true
+    }
 
     defaultConfig {
         applicationId "com.computernerd1101.mapbox"
@@ -23,11 +29,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-
-    // Enables data binding.
-    dataBinding {
-        enabled = true
     }
 
 }
