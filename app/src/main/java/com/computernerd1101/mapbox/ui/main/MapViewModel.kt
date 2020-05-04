@@ -18,10 +18,6 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-    private val viewModelJob = Job()
-
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-
     val offlineManager: OfflineManager = OfflineManager.getInstance(application.applicationContext)
 
     val definition: OfflineTilePyramidRegionDefinition
@@ -41,7 +37,7 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
             object : OfflineManager.CreateOfflineRegionCallback {
 
                 override fun onCreate(offlineRegion: OfflineRegion) {
-                    uiScope.launch { createOfflineRegion(offlineRegion) }
+                    createOfflineRegion(offlineRegion)
                 }
 
                 override fun onError(error: String) {
@@ -51,50 +47,42 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
             })
     }
 
-    private suspend fun createOfflineRegion(offlineRegion: OfflineRegion) {
-        Log.d(TAG, "createOfflineRegion")
-        withContext(Dispatchers.IO) {
-            offlineRegion.setDownloadState(OfflineRegion.STATE_ACTIVE)
-            offlineRegion.setObserver(object: OfflineRegion.OfflineRegionObserver {
+    private fun createOfflineRegion(offlineRegion: OfflineRegion) {
+        offlineRegion.setDownloadState(OfflineRegion.STATE_ACTIVE)
+        offlineRegion.setObserver(object: OfflineRegion.OfflineRegionObserver {
 
-                private var percentage: Int = -1
+            private var percentage: Int = -1
 
-                override fun onStatusChanged(status: OfflineRegionStatus) {
-                    val required = status.requiredResourceCount
-                    val oldPercentage = this.percentage
-                    val percentage: Int = when {
-                        status.isComplete -> {
-                            101
-                        }
-                        required > 0L ->
-                            (100 * status.completedResourceCount / required).toInt()
-                        else -> 0
+            override fun onStatusChanged(status: OfflineRegionStatus) {
+                val required = status.requiredResourceCount
+                val oldPercentage = this.percentage
+                val percentage: Int = when {
+                    status.isComplete -> {
+                        101
                     }
-                    this.percentage = percentage
-                    if (percentage > oldPercentage)
-                        Log.d(
-                            TAG, if (percentage >= 100)
-                                "Region downloaded successfully."
-                            else "$percentage% of region downloaded"
-                        )
+                    required > 0L ->
+                        (100 * status.completedResourceCount / required).toInt()
+                    else -> 0
                 }
+                this.percentage = percentage
+                if (percentage > oldPercentage)
+                    Log.d(
+                        TAG, if (percentage >= 100)
+                            "Region downloaded successfully."
+                        else "$percentage% of region downloaded"
+                    )
+            }
 
-                override fun onError(error: OfflineRegionError) {
-                    Log.e(TAG, "onError reason: ${error.reason}")
-                    Log.e(TAG, "onError message: ${error.message}")
-                }
+            override fun onError(error: OfflineRegionError) {
+                Log.e(TAG, "onError reason: ${error.reason}")
+                Log.e(TAG, "onError message: ${error.message}")
+            }
 
-                override fun mapboxTileCountLimitExceeded(limit: Long) {
-                    Log.e(TAG, "Mapbox tile count limit exceeded: $limit")
-                }
+            override fun mapboxTileCountLimitExceeded(limit: Long) {
+                Log.e(TAG, "Mapbox tile count limit exceeded: $limit")
+            }
 
-            })
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
+        })
     }
 
 }
